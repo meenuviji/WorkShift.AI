@@ -12,10 +12,20 @@ import sys
 # Add scripts folder to path
 sys.path.append('scripts')
 
-# Import your analyzers
-from job_market_analysis import JobMarketAnalyzer
-from automation_risk_analyzer import AutomationRiskAnalyzer
-from integrated_analysis import IntegratedWorkShiftAnalysis
+# Try to import analyzers with error handling
+try:
+    from scripts.job_market_analysis import JobMarketAnalyzer
+    from scripts.automation_risk_analyzer import AutomationRiskAnalyzer
+    from scripts.integrated_analysis import IntegratedWorkShiftAnalysis
+except ImportError:
+    # If scripts. prefix doesn't work, try without it
+    try:
+        from job_market_analysis import JobMarketAnalyzer
+        from automation_risk_analyzer import AutomationRiskAnalyzer
+        from integrated_analysis import IntegratedWorkShiftAnalysis
+    except ImportError as e:
+        st.error(f"Failed to import modules: {e}")
+        st.stop()
 
 # Page config
 st.set_page_config(
@@ -50,27 +60,71 @@ def load_data():
     """Load and cache the data"""
     data_path = 'data/raw/consolidated_jobs.csv'
     if os.path.exists(data_path):
-        return pd.read_csv(data_path)
-    else:
-        # Return empty DataFrame or sample data
-        st.warning("No data file found. Using sample data for demo.")
-        # Create sample data
-        sample_data = pd.DataFrame({
-            'title': ['Software Engineer', 'Data Scientist', 'Product Manager'] * 10,
-            'company': ['Tech Corp', 'Data Inc', 'Product Co'] * 10,
-            'location': ['San Francisco, CA', 'New York, NY', 'Seattle, WA'] * 10,
-            'search_term': ['Software Engineer', 'Data Scientist', 'Product Manager'] * 10,
-            'salary_avg': [150000, 140000, 135000] * 10,
-            'remote_allowed': [True, False, True] * 10
-        })
-        return sample_data
+        try:
+            return pd.read_csv(data_path)
+        except Exception as e:
+            st.warning(f"Error loading CSV: {e}. Using sample data instead.")
+    
+    # Return sample data
+    st.info("Using sample data for demo.")
+    # Create more comprehensive sample data
+    import numpy as np
+    np.random.seed(42)
+    
+    roles = ['Software Engineer', 'Data Scientist', 'Product Manager', 'DevOps Engineer', 
+             'Machine Learning Engineer', 'Data Analyst', 'Frontend Developer', 'Backend Developer']
+    companies = ['Tech Corp', 'Data Inc', 'Product Co', 'Cloud Systems', 'AI Startup', 
+                 'Analytics Pro', 'Web Solutions', 'Enterprise Tech']
+    locations = ['San Francisco, CA', 'New York, NY', 'Seattle, WA', 'Austin, TX', 
+                 'Boston, MA', 'Denver, CO', 'Chicago, IL', 'Los Angeles, CA']
+    
+    n_samples = 200
+    sample_data = pd.DataFrame({
+        'title': np.random.choice(roles, n_samples),
+        'company': np.random.choice(companies, n_samples),
+        'location': np.random.choice(locations, n_samples),
+        'search_term': np.random.choice(roles, n_samples),
+        'salary_avg': np.random.normal(120000, 30000, n_samples).clip(60000, 250000),
+        'remote_allowed': np.random.choice([True, False], n_samples, p=[0.4, 0.6]),
+        'state': [loc.split(', ')[1] for loc in np.random.choice(locations, n_samples)]
+    })
+    
+    return sample_data
 
 # Initialize analyzers
 @st.cache_resource
-def init_analyzers(data_path):
+def init_analyzers():
     """Initialize and cache analyzers"""
-    risk_analyzer = AutomationRiskAnalyzer()
-    return risk_analyzer
+    try:
+        risk_analyzer = AutomationRiskAnalyzer()
+        return risk_analyzer
+    except Exception as e:
+        st.error(f"Error initializing analyzers: {e}")
+        # Return a mock analyzer with basic functionality
+        class MockAnalyzer:
+            def __init__(self):
+                self.role_risk_profiles = {
+                    'Software Engineer': {'automation_risk_score': 0.25},
+                    'Data Scientist': {'automation_risk_score': 0.20},
+                    'Product Manager': {'automation_risk_score': 0.15},
+                    'DevOps Engineer': {'automation_risk_score': 0.45},
+                    'Machine Learning Engineer': {'automation_risk_score': 0.25},
+                    'Data Analyst': {'automation_risk_score': 0.55},
+                    'Frontend Developer': {'automation_risk_score': 0.35},
+                    'Backend Developer': {'automation_risk_score': 0.40}
+                }
+            
+            def calculate_automation_risk(self, role):
+                return self.role_risk_profiles.get(role, {}).get('automation_risk_score', 0.5)
+            
+            def get_risk_level(self, score):
+                if score >= 0.7: return "Very High"
+                elif score >= 0.5: return "High"
+                elif score >= 0.3: return "Medium"
+                elif score >= 0.15: return "Low"
+                else: return "Very Low"
+        
+        return MockAnalyzer()
 
 # Header
 st.title("🤖 WorkShift.AI - Career Intelligence Platform")
@@ -97,11 +151,7 @@ with st.sidebar:
 
 # Load data
 df = load_data()
-risk_analyzer = init_analyzers('data/raw/consolidated_jobs.csv')
-
-if df is None:
-    st.error("❌ No data found! Please run the data collector first.")
-    st.stop()
+risk_analyzer = init_analyzers()
 
 # Main content based on navigation
 if page == "🏠 Overview":
@@ -138,44 +188,52 @@ if page == "🏠 Overview":
         
         # Create risk distribution chart
         risk_data = []
-        for role, profile in risk_analyzer.role_risk_profiles.items():
-            risk_score = risk_analyzer.calculate_automation_risk(role)
-            risk_data.append({
-                'Role': role,
-                'Risk Score': risk_score,
-                'Risk Level': risk_analyzer.get_risk_level(risk_score)
-            })
+        for role in df['search_term'].unique():
+            if hasattr(risk_analyzer, 'role_risk_profiles') and role in risk_analyzer.role_risk_profiles:
+                risk_score = risk_analyzer.calculate_automation_risk(role)
+                risk_data.append({
+                    'Role': role,
+                    'Risk Score': risk_score,
+                    'Risk Level': risk_analyzer.get_risk_level(risk_score)
+                })
         
-        risk_df = pd.DataFrame(risk_data).sort_values('Risk Score')
-        
-        fig = px.bar(
-            risk_df, 
-            x='Risk Score', 
-            y='Role',
-            color='Risk Score',
-            color_continuous_scale='RdYlGn_r',
-            orientation='h',
-            title='Automation Risk by Role'
-        )
-        fig.update_layout(height=600)
-        st.plotly_chart(fig, use_container_width=True)
+        if risk_data:
+            risk_df = pd.DataFrame(risk_data).sort_values('Risk Score')
+            
+            fig = px.bar(
+                risk_df, 
+                x='Risk Score', 
+                y='Role',
+                color='Risk Score',
+                color_continuous_scale='RdYlGn_r',
+                orientation='h',
+                title='Automation Risk by Role'
+            )
+            fig.update_layout(height=400)
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("Risk analysis data not available")
     
     with col2:
         st.subheader("🎯 Quick Insights")
         
-        # Safest roles
-        safe_roles = risk_df[risk_df['Risk Score'] < 0.3].sort_values('Risk Score')
-        st.markdown("**🛡️ Safest Roles:**")
-        for _, row in safe_roles.head(3).iterrows():
-            st.markdown(f"- {row['Role']} ({row['Risk Score']:.2f})")
-        
-        st.markdown("")
-        
-        # Highest risk roles
-        risky_roles = risk_df[risk_df['Risk Score'] >= 0.7].sort_values('Risk Score', ascending=False)
-        st.markdown("**⚠️ Highest Risk Roles:**")
-        for _, row in risky_roles.head(3).iterrows():
-            st.markdown(f"- {row['Role']} ({row['Risk Score']:.2f})")
+        if risk_data:
+            risk_df = pd.DataFrame(risk_data)
+            # Safest roles
+            safe_roles = risk_df[risk_df['Risk Score'] < 0.3].sort_values('Risk Score')
+            if not safe_roles.empty:
+                st.markdown("**🛡️ Safest Roles:**")
+                for _, row in safe_roles.head(3).iterrows():
+                    st.markdown(f"- {row['Role']} ({row['Risk Score']:.2f})")
+            
+            st.markdown("")
+            
+            # Highest risk roles
+            risky_roles = risk_df[risk_df['Risk Score'] >= 0.5].sort_values('Risk Score', ascending=False)
+            if not risky_roles.empty:
+                st.markdown("**⚠️ Higher Risk Roles:**")
+                for _, row in risky_roles.head(3).iterrows():
+                    st.markdown(f"- {row['Role']} ({row['Risk Score']:.2f})")
 
 elif page == "⚠️ Risk Assessment":
     st.header("⚠️ Automation Risk Assessment")
@@ -186,27 +244,31 @@ elif page == "⚠️ Risk Assessment":
         ["All", "Very Low", "Low", "Medium", "High", "Very High"]
     )
     
-    # Display risk profiles
+    # Display risk profiles for available roles
+    available_roles = df['search_term'].unique()
     risk_data = []
-    for role, profile in risk_analyzer.role_risk_profiles.items():
-        risk_score = risk_analyzer.calculate_automation_risk(role)
-        level = risk_analyzer.get_risk_level(risk_score)
+    
+    for role in available_roles:
+        if hasattr(risk_analyzer, 'role_risk_profiles') and role in risk_analyzer.role_risk_profiles:
+            profile = risk_analyzer.role_risk_profiles[role]
+            risk_score = risk_analyzer.calculate_automation_risk(role)
+            level = risk_analyzer.get_risk_level(risk_score)
+            
+            if risk_level == "All" or level == risk_level:
+                risk_data.append({
+                    'Role': role,
+                    'Risk Score': risk_score,
+                    'Risk Level': level,
+                    'Routine Tasks': profile.get('routine_tasks', 0.5),
+                    'Human Interaction': profile.get('human_interaction', 0.5),
+                    'Creative Problem Solving': profile.get('creative_problem_solving', 0.5),
+                    'Technical Complexity': profile.get('technical_complexity', 0.5)
+                })
+    
+    if risk_data:
+        risk_display_df = pd.DataFrame(risk_data).sort_values('Risk Score', ascending=False)
         
-        if risk_level == "All" or level == risk_level:
-            risk_data.append({
-                'Role': role,
-                'Risk Score': risk_score,
-                'Risk Level': level,
-                'Routine Tasks': profile['routine_tasks'],
-                'Human Interaction': profile['human_interaction'],
-                'Creative Problem Solving': profile['creative_problem_solving'],
-                'Technical Complexity': profile['technical_complexity']
-            })
-    
-    risk_display_df = pd.DataFrame(risk_data).sort_values('Risk Score', ascending=False)
-    
-    # Risk factors visualization
-    if len(risk_display_df) > 0:
+        # Risk factors visualization
         col1, col2 = st.columns([3, 2])
         
         with col1:
@@ -280,6 +342,8 @@ elif page == "⚠️ Risk Assessment":
             
             for strategy in strategies:
                 st.markdown(f"• {strategy}")
+    else:
+        st.info("No risk data available for the selected filter")
 
 elif page == "📊 Market Analysis":
     st.header("📊 Job Market Analysis")
@@ -332,25 +396,26 @@ elif page == "📈 Salary Insights":
     if len(salary_df) > 0:
         # Salary by role
         role_salaries = salary_df.groupby('search_term')['salary_avg'].agg(['mean', 'count'])
-        role_salaries = role_salaries[role_salaries['count'] >= 5].sort_values('mean', ascending=False)
+        role_salaries = role_salaries[role_salaries['count'] >= 3].sort_values('mean', ascending=False)
         
-        fig = px.bar(
-            x=role_salaries['mean'],
-            y=role_salaries.index,
-            orientation='h',
-            labels={'x': 'Average Salary ($)', 'y': 'Role'},
-            title='Average Salary by Role (min 5 jobs)',
-            color=role_salaries['mean'],
-            color_continuous_scale='Greens'
-        )
-        fig.update_traces(text=[f'${x:,.0f}' for x in role_salaries['mean']], textposition='outside')
-        st.plotly_chart(fig, use_container_width=True)
+        if not role_salaries.empty:
+            fig = px.bar(
+                x=role_salaries['mean'],
+                y=role_salaries.index,
+                orientation='h',
+                labels={'x': 'Average Salary ($)', 'y': 'Role'},
+                title='Average Salary by Role',
+                color=role_salaries['mean'],
+                color_continuous_scale='Greens'
+            )
+            fig.update_traces(text=[f'${x:,.0f}' for x in role_salaries['mean']], textposition='outside')
+            st.plotly_chart(fig, use_container_width=True)
         
         # Salary distribution
         fig = px.histogram(
             salary_df,
             x='salary_avg',
-            nbins=30,
+            nbins=20,
             title='Salary Distribution',
             labels={'salary_avg': 'Average Salary ($)', 'count': 'Number of Jobs'}
         )
@@ -378,16 +443,17 @@ elif page == "🌍 Location Analysis":
     # State analysis
     if 'state' in df.columns:
         state_data = df['state'].value_counts().head(10)
-        fig = px.choropleth(
-            locations=state_data.index,
-            locationmode="USA-states",
-            color=state_data.values,
-            scope="usa",
-            title="Job Distribution by State",
-            color_continuous_scale="Plasma",
-            labels={'color': 'Number of Jobs'}
-        )
-        st.plotly_chart(fig, use_container_width=True)
+        if not state_data.empty:
+            fig = px.choropleth(
+                locations=state_data.index,
+                locationmode="USA-states",
+                color=state_data.values,
+                scope="usa",
+                title="Job Distribution by State",
+                color_continuous_scale="Plasma",
+                labels={'color': 'Number of Jobs'}
+            )
+            st.plotly_chart(fig, use_container_width=True)
 
 # Footer
 st.markdown("---")
