@@ -1,0 +1,23 @@
+WorkShift.AI - Automation Risk Analysis Report
+Generated on: 2025-06-30 14:56:06
+============================================================
+
+AUTOMATION RISK RANKINGS
+------------------------------------------------------------
+Data Entry                | Risk: 1.00 (Very High)
+QA Tester                 | Risk: 0.90 (Very High)
+Data Analyst              | Risk: 0.71 (Very High)
+DevOps Engineer           | Risk: 0.48 (Medium)
+Backend Developer         | Risk: 0.43 (Medium)
+Cloud Engineer            | Risk: 0.40 (Medium)
+Frontend Developer        | Risk: 0.28 (Low)
+Security Engineer         | Risk: 0.22 (Low)
+Full Stack Developer      | Risk: 0.21 (Low)
+Machine Learning Engineer | Risk: 0.19 (Low)
+Software Engineer         | Risk: 0.12 (Very Low)
+Data Scientist            | Risk: 0.10 (Very Low)
+Product Manager           | Risk: 0.00 (Very Low)
+Engineering Manager       | Risk: 0.00 (Very Low)
+
+============================================================
+END OF REPORT

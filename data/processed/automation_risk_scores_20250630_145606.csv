@@ -1,0 +1,15 @@
+role,automation_risk_score,risk_level,routine_tasks,human_interaction,creative_problem_solving,technical_complexity
+Data Entry,1.0,Very High,0.95,0.1,0.05,0.2
+QA Tester,0.8950000000000001,Very High,0.7,0.3,0.3,0.4
+Data Analyst,0.7050000000000001,Very High,0.6,0.4,0.5,0.6
+Frontend Developer,0.285,Low,0.5,0.5,0.7,0.7
+Backend Developer,0.42750000000000005,Medium,0.55,0.35,0.65,0.8
+Full Stack Developer,0.215,Low,0.45,0.45,0.75,0.85
+DevOps Engineer,0.48,Medium,0.65,0.4,0.6,0.9
+Machine Learning Engineer,0.19000000000000003,Low,0.4,0.35,0.85,0.95
+Data Scientist,0.10250000000000001,Very Low,0.35,0.45,0.9,0.9
+Software Engineer,0.12250000000000003,Very Low,0.4,0.5,0.8,0.85
+Cloud Engineer,0.4,Medium,0.55,0.35,0.65,0.85
+Security Engineer,0.21999999999999995,Low,0.45,0.4,0.8,0.9
+Product Manager,0.0,Very Low,0.3,0.9,0.85,0.5
+Engineering Manager,0.0,Very Low,0.25,0.95,0.8,0.6

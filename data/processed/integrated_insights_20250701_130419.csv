@@ -1,0 +1,12 @@
+Role,Automation_Risk_Score,Risk_Level,Job_Count,Avg_Salary,Min_Salary,Max_Salary,Top_Location,Top_Company,Remote_Jobs,Remote_Percentage
+Product Manager,0.0,Very Low,200,129377.74572327045,82.5,290000.0,"San Francisco, California",Meta,2,2.5
+Data Scientist,0.10250000000000001,Very Low,200,139036.58922535213,27.645,275000.0,"San Francisco, California",Meta,4,5.0
+Software Engineer,0.12250000000000003,Very Low,400,138868.96361563518,45.67,298500.0,"San Francisco, California",Meta,12,7.5
+Machine Learning Engineer,0.19000000000000003,Low,200,150888.93673076926,85.0,324500.0,"San Francisco, California",Meta,4,5.0
+Full Stack Developer,0.215,Low,200,132442.91756578945,47.5,270400.0,"San Francisco, California",Amazon,7,8.75
+Security Engineer,0.21999999999999995,Low,200,132300.2267549669,33.5,351912.97,"San Francisco, California",Meta,4,5.0
+Frontend Developer,0.285,Low,200,131451.78926666666,21.5,350000.0,"San Francisco, California",Jobs via Dice,3,3.75
+Cloud Engineer,0.4,Medium,200,139057.79440251572,55.0,330000.0,"San Francisco, California",Amazon,8,10.0
+Backend Developer,0.42750000000000005,Medium,200,146553.2958,52.5,270400.0,"San Francisco, California",Oracle,7,8.75
+DevOps Engineer,0.48,Medium,200,133633.0250340136,55.0,351912.97,"San Francisco, California",Amazon,6,7.5
+Data Analyst,0.7050000000000001,Very High,200,108202.54350993378,27.5,190658.55,"San Francisco, California",Amazon,4,5.0
