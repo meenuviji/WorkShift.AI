@@ -20,7 +20,7 @@ WorkShift.AI is a data analytics and business intelligence project that forecast
 
 ## 🔧 Tools Used
 - Python (Pandas, Prophet, XGBoost)
-- Power BI / Streamlit
+- Streamlit
 - Git + VS Code
 
 ---
