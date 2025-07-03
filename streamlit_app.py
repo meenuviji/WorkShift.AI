@@ -26,240 +26,304 @@ st.set_page_config(
     page_title="WorkShift.AI - Career Intelligence Platform",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Enhanced Custom CSS with modern design
+# Modern, minimalist CSS inspired by professional portfolio
 st.markdown("""
 <style>
-    /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    /* Import modern fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     
-    /* Global Styles */
+    /* Global Reset and Typography */
     * {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     
-    /* Main container styling */
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Main container with subtle gradient */
     .main {
-        padding: 2rem;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        min-height: 100vh;
+        background: linear-gradient(to bottom, #FAFBFC 0%, #F6F8FA 100%);
+        padding: 0;
     }
     
-    /* Sidebar styling */
-    .css-1d391kg {
-        background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+    /* Modern navigation bar */
+    .nav-container {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        margin-bottom: 2rem;
     }
     
-    .css-1d391kg .stMarkdown {
-        color: white !important;
+    /* Section containers */
+    .section-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
     }
     
-    /* Enhanced metric cards */
-    .stMetric {
+    /* Modern cards with subtle shadows */
+    .modern-card {
         background: white;
-        padding: 25px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        border: none;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 1.5rem;
     }
     
-    .stMetric:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    .modern-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Typography with hierarchy */
+    h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        color: #0F172A;
+        margin-bottom: 1rem;
+    }
+    
+    h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1E293B;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 1rem;
+        letter-spacing: -0.01em;
+    }
+    
+    p {
+        color: #64748B;
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+    
+    /* Modern metric cards */
+    .metric-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid #E2E8F0;
+        transition: all 0.2s ease;
+        height: 100%;
+    }
+    
+    .metric-card:hover {
+        border-color: #CBD5E1;
+        transform: translateY(-1px);
+    }
+    
+    .metric-label {
+        font-size: 0.875rem;
+        color: #64748B;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
     
     .metric-value {
         font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        color: #0F172A;
+        line-height: 1;
+        letter-spacing: -0.02em;
     }
     
-    /* Risk level styling with gradients */
-    .risk-very-high { 
-        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-    
-    .risk-high { 
-        background: linear-gradient(135deg, #f9ca24, #f0932b);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-    
-    .risk-medium { 
-        background: linear-gradient(135deg, #f6e58d, #dfe4ea);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-    
-    .risk-low { 
-        background: linear-gradient(135deg, #6ab04c, #badc58);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-    
-    .risk-very-low { 
-        background: linear-gradient(135deg, #4834d4, #686de0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-    
-    /* Card containers */
-    .info-card {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
-    }
-    
-    .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
-    
-    /* Headers with gradient */
-    h1, h2, h3 {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-    }
-    
-    /* Button styling */
+    /* Modern buttons */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #0F172A;
         color: white;
         border: none;
-        padding: 12px 30px;
-        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
         font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        letter-spacing: -0.01em;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
+        background: #1E293B;
+        transform: translateY(-1px);
     }
     
-    /* Select box styling */
+    /* Subtle risk indicators */
+    .risk-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        letter-spacing: -0.01em;
+    }
+    
+    .risk-very-low {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+    
+    .risk-low {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+    
+    .risk-medium {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+    
+    .risk-high {
+        background: #FED7AA;
+        color: #9A3412;
+    }
+    
+    .risk-very-high {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+    
+    /* Modern select boxes */
     .stSelectbox > div > div {
         background: white;
-        border-radius: 15px;
-        border: 2px solid #e0e0e0;
-        transition: all 0.3s ease;
+        border: 2px solid #E2E8F0;
+        border-radius: 8px;
+        transition: all 0.2s ease;
     }
     
     .stSelectbox > div > div:hover {
-        border-color: #667eea;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        border-color: #CBD5E1;
     }
     
-    /* Progress bar styling */
-    .stProgress > div > div > div {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
+    .stSelectbox > div > div:focus-within {
+        border-color: #0F172A;
+        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
     }
     
-    /* Plotly chart containers */
+    /* Clean dividers */
+    hr {
+        border: none;
+        height: 1px;
+        background: #E2E8F0;
+        margin: 3rem 0;
+    }
+    
+    /* Hero section */
+    .hero-section {
+        text-align: center;
+        padding: 4rem 0;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: #64748B;
+        margin-bottom: 3rem;
+        font-weight: 400;
+    }
+    
+    /* Feature grid */
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    /* Chart styling */
     .js-plotly-plot {
-        border-radius: 20px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    /* Tab styling */
+    .stTabs [data-baseweb="tab-list"] {
+        background: transparent;
+        gap: 2rem;
+        border-bottom: 2px solid #E2E8F0;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        border: none;
+        color: #64748B;
+        font-weight: 600;
+        padding: 1rem 0;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #334155;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        color: #0F172A;
+        border-bottom-color: #0F172A;
     }
     
     /* Info boxes */
-    .stInfo {
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        border: none;
-        border-radius: 15px;
-        padding: 20px;
-        font-weight: 500;
+    .info-box {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin: 1rem 0;
     }
     
-    /* Warning boxes */
-    .stWarning {
-        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-        border: none;
-        border-radius: 15px;
-        padding: 20px;
-        font-weight: 500;
+    /* Smooth animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Success boxes */
-    .stSuccess {
-        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-        border: none;
-        border-radius: 15px;
-        padding: 20px;
-        font-weight: 500;
+    .animate-in {
+        animation: fadeIn 0.5s ease-out;
     }
     
-    /* Markdown text enhancement */
-    .stMarkdown {
-        line-height: 1.6;
+    /* Professional sidebar */
+    section[data-testid="stSidebar"] {
+        background: white;
+        border-right: 1px solid #E2E8F0;
     }
     
-    /* Animated gradient background for header */
-    .hero-section {
-        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-        background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
-        padding: 50px;
-        border-radius: 20px;
-        margin-bottom: 30px;
-        color: white;
-        text-align: center;
+    section[data-testid="stSidebar"] .stMarkdown {
+        color: #334155;
     }
     
-    @keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    /* Loading states */
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #E2E8F0 0%, #CBD5E1 50%, #E2E8F0 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
     }
     
-    /* Icon styling */
-    .icon-container {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        height: 60px;
-        border-radius: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        font-size: 24px;
-        margin-right: 15px;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
-    
-    /* Floating animation for elements */
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
-    }
-    
-    .floating {
-        animation: float 3s ease-in-out infinite;
+    @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -269,13 +333,11 @@ def load_data():
     path = 'data/raw/adzuna_jobs_20250625_125706.csv'
     if os.path.exists(path):
         df = pd.read_csv(path)
-        # Create salary_avg if missing
         if 'salary_avg' not in df.columns:
             if 'salary_min' in df.columns and 'salary_max' in df.columns:
                 df['salary_avg'] = (df['salary_min'] + df['salary_max']) / 2
             else:
                 df['salary_avg'] = None
-        # Create state column if missing
         if 'state' not in df.columns and 'location' in df.columns:
             df['state'] = df['location'].astype(str).str.extract(r',\s*([A-Z]{2})$')
         return df
@@ -313,287 +375,278 @@ def init_analyzers():
 
         return MockAnalyzer()
 
-# Enhanced Sidebar with gradient background
-with st.sidebar:
-    st.markdown("""
-    <div style='text-align: center; padding: 20px;'>
-        <h1 style='color: white; font-size: 2.5rem; margin-bottom: 10px;'>🤖 WorkShift.AI</h1>
-        <p style='color: #ecf0f1; font-size: 1.1rem;'>Career Intelligence Platform</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    page = st.selectbox("🧭 Navigate", [
-        "🏠 Overview", 
-        "📊 Market Analysis", 
-        "⚠️ Risk Assessment",
-        "💼 Career Pathways", 
-        "📈 Salary Insights", 
-        "🌍 Location Analysis"
-    ])
-    
-    st.markdown("---")
-    
-    st.markdown("""
-    <div style='background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-top: 20px;'>
-        <h3 style='color: white; margin-bottom: 10px;'>📌 About</h3>
-        <p style='color: #ecf0f1; font-size: 0.9rem; line-height: 1.5;'>
-        WorkShift.AI analyzes job market data and automation risks to help you make
-        informed career decisions in the age of AI.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Add social links or additional info
-    st.markdown("""
-    <div style='position: absolute; bottom: 20px; left: 20px; right: 20px; text-align: center;'>
-        <p style='color: #bdc3c7; font-size: 0.8rem;'>Built with ❤️ by WorkShift.AI Team</p>
-    </div>
-    """, unsafe_allow_html=True)
-
 # Load data
 df = load_data()
 risk_analyzer = init_analyzers()
 
-# Hero Section for all pages
+# Modern Navigation
 st.markdown("""
-<div class='hero-section'>
-    <h1 style='font-size: 3.5rem; margin-bottom: 20px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);'>
-        Welcome to WorkShift.AI
-    </h1>
-    <p style='font-size: 1.3rem; color: rgba(255,255,255,0.9); max-width: 800px; margin: 0 auto;'>
-        Empowering professionals with AI-driven insights for career navigation in the digital age
+<div class="nav-container">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 2rem;">
+            <h3 style="margin: 0; font-size: 1.5rem; font-weight: 800;">WorkShift.AI</h3>
+            <span style="color: #64748B; font-size: 0.875rem;">Career Intelligence Platform</span>
+        </div>
+        <div style="color: #64748B; font-size: 0.875rem;">
+            {date}
+        </div>
+    </div>
+</div>
+""".format(date=datetime.now().strftime('%B %d, %Y')), unsafe_allow_html=True)
+
+# Hero Section
+st.markdown("""
+<div class="hero-section animate-in">
+    <h1>Navigate Your Career<br>in the Age of AI</h1>
+    <p class="hero-subtitle">
+        Data-driven insights to help you make informed career decisions 
+        and stay ahead of automation trends.
     </p>
 </div>
 """, unsafe_allow_html=True)
 
-# Page: Overview
-if page == "🏠 Overview":
-    # Metrics with enhanced styling
-    st.markdown("<h2 style='text-align: center; margin-bottom: 30px;'>📊 Key Metrics Dashboard</h2>", unsafe_allow_html=True)
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.markdown("""
-        <div class='info-card floating'>
-            <div style='display: flex; align-items: center;'>
-                <div class='icon-container'>📊</div>
-                <div>
-                    <p style='color: #666; margin: 0; font-size: 0.9rem;'>Jobs Analyzed</p>
-                    <p class='metric-value' style='margin: 0;'>{:,}</p>
-                </div>
-            </div>
-        </div>
-        """.format(len(df)), unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class='info-card floating' style='animation-delay: 0.1s;'>
-            <div style='display: flex; align-items: center;'>
-                <div class='icon-container'>🏢</div>
-                <div>
-                    <p style='color: #666; margin: 0; font-size: 0.9rem;'>Companies</p>
-                    <p class='metric-value' style='margin: 0;'>{:,}</p>
-                </div>
-            </div>
-        </div>
-        """.format(df['company'].nunique()), unsafe_allow_html=True)
-    
-    with col3:
-        avg_salary = df['salary_avg'].mean() if 'salary_avg' in df.columns else None
-        salary_text = f"${avg_salary:,.0f}" if avg_salary else "N/A"
-        st.markdown("""
-        <div class='info-card floating' style='animation-delay: 0.2s;'>
-            <div style='display: flex; align-items: center;'>
-                <div class='icon-container'>💰</div>
-                <div>
-                    <p style='color: #666; margin: 0; font-size: 0.9rem;'>Avg Salary</p>
-                    <p class='metric-value' style='margin: 0;'>{}</p>
-                </div>
-            </div>
-        </div>
-        """.format(salary_text), unsafe_allow_html=True)
-    
-    with col4:
-        remote_pct = df['remote_allowed'].mean() * 100 if 'remote_allowed' in df.columns else None
-        remote_text = f"{remote_pct:.1f}%" if remote_pct else "N/A"
-        st.markdown("""
-        <div class='info-card floating' style='animation-delay: 0.3s;'>
-            <div style='display: flex; align-items: center;'>
-                <div class='icon-container'>🌍</div>
-                <div>
-                    <p style='color: #666; margin: 0; font-size: 0.9rem;'>Remote Jobs</p>
-                    <p class='metric-value' style='margin: 0;'>{}</p>
-                </div>
-            </div>
-        </div>
-        """.format(remote_text), unsafe_allow_html=True)
+# Key Metrics
+st.markdown('<div class="section-container">', unsafe_allow_html=True)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.markdown(f"""
+    <div class="metric-card animate-in">
+        <div class="metric-label">Total Jobs Analyzed</div>
+        <div class="metric-value">{len(df):,}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown(f"""
+    <div class="metric-card animate-in" style="animation-delay: 0.1s;">
+        <div class="metric-label">Companies</div>
+        <div class="metric-value">{df['company'].nunique():,}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    avg_salary = df['salary_avg'].mean() if 'salary_avg' in df.columns else None
+    salary_text = f"${avg_salary:,.0f}" if avg_salary else "N/A"
+    st.markdown(f"""
+    <div class="metric-card animate-in" style="animation-delay: 0.2s;">
+        <div class="metric-label">Average Salary</div>
+        <div class="metric-value">{salary_text}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    remote_pct = df['remote_allowed'].mean() * 100 if 'remote_allowed' in df.columns else None
+    remote_text = f"{remote_pct:.0f}%" if remote_pct else "N/A"
+    st.markdown(f"""
+    <div class="metric-card animate-in" style="animation-delay: 0.3s;">
+        <div class="metric-label">Remote Positions</div>
+        <div class="metric-value">{remote_text}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Main Content Tabs
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Overview", "💰 Compensation", "🌍 Locations", "⚠️ Risk Analysis", "🎯 Insights"])
+
+with tab1:
+    st.markdown('<div class="section-container">', unsafe_allow_html=True)
     
-    # Risk Overview with enhanced chart
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-        st.subheader("🤖 Automation Risk by Role")
+        st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+        st.markdown("### Top In-Demand Roles")
         
-        risk_data = []
-        for role in df['title'].value_counts().head(10).index:
-            score = risk_analyzer.calculate_automation_risk(role)
-            level = risk_analyzer.get_risk_level(score)
-            risk_data.append({'Role': role, 'Risk Score': score, 'Risk Level': level})
-
-        risk_df = pd.DataFrame(risk_data).sort_values('Risk Score')
-        
-        # Enhanced bar chart with gradient colors
-        fig = px.bar(risk_df, x='Risk Score', y='Role', orientation='h',
-                     color='Risk Score', color_continuous_scale='RdYlGn_r',
-                     title=None)
-        
-        fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(size=14),
-            margin=dict(l=0, r=0, t=0, b=0),
-            height=400,
-            showlegend=False,
-            coloraxis_colorbar=dict(
-                title="Risk Score",
-                thicknessmode="pixels", thickness=15,
-                lenmode="pixels", len=200,
-                yanchor="top", y=1,
-                ticks="outside"
-            )
+        demand = df['title'].value_counts().head(10)
+        fig = px.bar(
+            x=demand.values, 
+            y=demand.index, 
+            orientation='h',
+            color=demand.values,
+            color_continuous_scale=['#F3F4F6', '#0F172A']
         )
         
-        fig.update_traces(marker=dict(line=dict(width=0)))
+        fig.update_layout(
+            xaxis_title="Number of Openings",
+            yaxis_title="",
+            showlegend=False,
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            font=dict(family="Plus Jakarta Sans", size=14),
+            margin=dict(l=0, r=0, t=20, b=0),
+            height=400,
+            coloraxis_showscale=False
+        )
+        
+        fig.update_xaxes(gridcolor='#F3F4F6', zeroline=False)
+        fig.update_yaxes(tickfont=dict(size=12))
+        
         st.plotly_chart(fig, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-        st.subheader("🎯 Quick Insights")
+        st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+        st.markdown("### Risk Distribution")
         
-        # Safest roles with icons
-        st.markdown("### 🛡️ Safest Roles")
-        for _, row in risk_df[risk_df['Risk Score'] < 0.3].head(3).iterrows():
-            st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); 
-                        padding: 10px 15px; border-radius: 10px; margin-bottom: 10px;'>
-                <strong>{row['Role']}</strong><br>
-                <span style='color: #2e7d32;'>Risk Score: {row['Risk Score']:.2f}</span>
-            </div>
-            """, unsafe_allow_html=True)
+        # Calculate risk distribution
+        risk_dist = []
+        for role in df['title'].value_counts().head(20).index:
+            score = risk_analyzer.calculate_automation_risk(role)
+            level = risk_analyzer.get_risk_level(score)
+            risk_dist.append(level)
         
-        st.markdown("### ⚠️ Higher Risk Roles")
-        for _, row in risk_df[risk_df['Risk Score'] >= 0.5].head(3).iterrows():
-            st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); 
-                        padding: 10px 15px; border-radius: 10px; margin-bottom: 10px;'>
-                <strong>{row['Role']}</strong><br>
-                <span style='color: #c62828;'>Risk Score: {row['Risk Score']:.2f}</span>
-            </div>
-            """, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        risk_counts = pd.Series(risk_dist).value_counts()
+        
+        colors = {
+            'Very Low': '#3B82F6',
+            'Low': '#10B981', 
+            'Medium': '#F59E0B',
+            'High': '#F97316',
+            'Very High': '#EF4444'
+        }
+        
+        fig = px.pie(
+            values=risk_counts.values,
+            names=risk_counts.index,
+            color=risk_counts.index,
+            color_discrete_map=colors
+        )
+        
+        fig.update_traces(
+            textposition='inside',
+            textinfo='percent+label',
+            hovertemplate='<b>%{label}</b><br>%{value} roles<br>%{percent}<extra></extra>'
+        )
+        
+        fig.update_layout(
+            showlegend=False,
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            font=dict(family="Plus Jakarta Sans", size=14),
+            margin=dict(l=0, r=0, t=20, b=0),
+            height=350
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# Page: Salary Insights
-elif page == "📈 Salary Insights":
-    st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-    st.header("💰 Salary Intelligence Dashboard")
+with tab2:
+    st.markdown('<div class="section-container">', unsafe_allow_html=True)
     
     if 'salary_avg' in df.columns:
         salary_df = df.dropna(subset=['salary_avg'])
         
-        # Salary distribution with KDE
-        col1, col2 = st.columns([2, 1])
+        col1, col2 = st.columns([3, 1])
         
         with col1:
-            st.subheader("📊 Salary Distribution")
-            fig = px.histogram(salary_df, x='salary_avg', nbins=30,
-                             marginal='box', hover_data=['title'])
+            st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+            st.markdown("### Salary Distribution")
+            
+            fig = px.histogram(
+                salary_df, 
+                x='salary_avg', 
+                nbins=30,
+                color_discrete_sequence=['#0F172A']
+            )
             
             fig.update_layout(
                 xaxis_title="Average Salary ($)",
                 yaxis_title="Number of Jobs",
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(size=14),
-                showlegend=False
+                showlegend=False,
+                plot_bgcolor='white',
+                paper_bgcolor='white',
+                font=dict(family="Plus Jakarta Sans", size=14),
+                margin=dict(l=0, r=0, t=20, b=0),
+                height=350
             )
             
-            fig.update_traces(marker=dict(
-                color='rgba(102, 126, 234, 0.6)',
-                line=dict(color='rgba(102, 126, 234, 1)', width=1)
-            ))
+            fig.update_xaxes(gridcolor='#F3F4F6', zeroline=False)
+            fig.update_yaxes(gridcolor='#F3F4F6', zeroline=False)
             
             st.plotly_chart(fig, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
         
         with col2:
-            st.subheader("📈 Salary Stats")
+            st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+            st.markdown("### Key Statistics")
+            
             st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); 
-                        padding: 20px; border-radius: 15px; margin-bottom: 15px;'>
-                <h3 style='margin: 0; color: #6a1b9a;'>Average</h3>
-                <p style='font-size: 2rem; font-weight: 700; margin: 0; color: #6a1b9a;'>
+            <div class="info-box">
+                <div class="metric-label">Average</div>
+                <div style="font-size: 1.75rem; font-weight: 700; color: #0F172A;">
                     ${salary_df['salary_avg'].mean():,.0f}
-                </p>
+                </div>
             </div>
             
-            <div style='background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); 
-                        padding: 20px; border-radius: 15px; margin-bottom: 15px;'>
-                <h3 style='margin: 0; color: #2e7d32;'>Median</h3>
-                <p style='font-size: 2rem; font-weight: 700; margin: 0; color: #2e7d32;'>
+            <div class="info-box">
+                <div class="metric-label">Median</div>
+                <div style="font-size: 1.75rem; font-weight: 700; color: #0F172A;">
                     ${salary_df['salary_avg'].median():,.0f}
-                </p>
+                </div>
             </div>
             
-            <div style='background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); 
-                        padding: 20px; border-radius: 15px;'>
-                <h3 style='margin: 0; color: #ef6c00;'>Range</h3>
-                <p style='font-size: 1.2rem; font-weight: 600; margin: 0; color: #ef6c00;'>
+            <div class="info-box">
+                <div class="metric-label">Range</div>
+                <div style="font-size: 1.25rem; font-weight: 600; color: #334155;">
                     ${salary_df['salary_avg'].min():,.0f} - ${salary_df['salary_avg'].max():,.0f}
-                </p>
+                </div>
             </div>
             """, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
         
         # Top paying roles
-        st.subheader("💎 Top Paying Roles")
-        role_salaries = salary_df.groupby('title')['salary_avg'].agg(['mean', 'count'])
-        role_salaries = role_salaries[role_salaries['count'] >= 3].sort_values('mean', ascending=False).head(10)
+        st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+        st.markdown("### Highest Paying Roles")
         
-        fig = px.bar(role_salaries, x='mean', y=role_salaries.index, orientation='h',
-                     color='mean', color_continuous_scale='Viridis',
-                     text=[f'${x:,.0f}' for x in role_salaries['mean']])
+        role_salaries = salary_df.groupby('title')['salary_avg'].agg(['mean', 'count'])
+        role_salaries = role_salaries[role_salaries['count'] >= 3].sort_values('mean', ascending=False).head(15)
+        
+        fig = px.bar(
+            x=role_salaries['mean'],
+            y=role_salaries.index,
+            orientation='h',
+            text=[f'${x:,.0f}' for x in role_salaries['mean']],
+            color=role_salaries['mean'],
+            color_continuous_scale=['#F3F4F6', '#0F172A']
+        )
         
         fig.update_layout(
             xaxis_title="Average Salary ($)",
             yaxis_title="",
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(size=14),
             showlegend=False,
-            height=500
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            font=dict(family="Plus Jakarta Sans", size=14),
+            margin=dict(l=0, r=0, t=20, b=0),
+            height=500,
+            coloraxis_showscale=False
         )
         
-        fig.update_traces(textposition='outside')
+        fig.update_traces(textposition='outside', textfont=dict(size=12))
+        fig.update_xaxes(gridcolor='#F3F4F6', zeroline=False)
+        fig.update_yaxes(tickfont=dict(size=12))
+        
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
-        st.warning("No salary data available")
+        st.info("Salary data not available in this dataset.")
     
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# Page: Location Analysis
-elif page == "🌍 Location Analysis":
-    st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-    st.header("🌍 Geographic Job Market Analysis")
+with tab3:
+    st.markdown('<div class="section-container">', unsafe_allow_html=True)
     
     if 'location' in df.columns:
-        # Interactive map if state data exists
+        st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+        st.markdown("### Geographic Distribution")
+        
+        # Map visualization if state data exists
         if 'state' in df.columns:
-            st.subheader("🗺️ Job Distribution by State")
             state_counts = df['state'].value_counts()
             
             fig = px.choropleth(
@@ -601,244 +654,280 @@ elif page == "🌍 Location Analysis":
                 locationmode="USA-states",
                 color=state_counts.values,
                 scope="usa",
-                color_continuous_scale="Viridis",
+                color_continuous_scale=[[0, '#F3F4F6'], [1, '#0F172A']],
                 labels={'color': 'Number of Jobs'}
             )
             
             fig.update_layout(
-                geo=dict(bgcolor='rgba(0,0,0,0)'),
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(size=14),
+                geo=dict(
+                    bgcolor='white',
+                    lakecolor='white',
+                    showframe=False,
+                    projection_type='albers usa'
+                ),
+                paper_bgcolor='white',
+                font=dict(family="Plus Jakarta Sans", size=14),
                 margin=dict(l=0, r=0, t=0, b=0),
-                height=500
+                height=400
             )
             
             st.plotly_chart(fig, use_container_width=True)
         
-        # Top locations with custom styling
-        st.subheader("🏙️ Top Job Markets")
+        # Top locations bar chart
+        st.markdown("### Top Job Markets")
         location_counts = df['location'].value_counts().head(15)
         
-        fig = px.bar(x=location_counts.values, y=location_counts.index,
-                     orientation='h', color=location_counts.values,
-                     color_continuous_scale='Blues',
-                     text=location_counts.values)
+        fig = px.bar(
+            x=location_counts.values,
+            y=location_counts.index,
+            orientation='h',
+            text=location_counts.values,
+            color=location_counts.values,
+            color_continuous_scale=['#F3F4F6', '#0F172A']
+        )
         
         fig.update_layout(
             xaxis_title="Number of Jobs",
             yaxis_title="",
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(size=14),
             showlegend=False,
-            height=600
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            font=dict(family="Plus Jakarta Sans", size=14),
+            margin=dict(l=0, r=0, t=20, b=0),
+            height=500,
+            coloraxis_showscale=False
         )
         
-        fig.update_traces(textposition='outside')
-        st.plotly_chart(fig, use_container_width=True)
-    
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# Page: Market Analysis
-elif page == "📊 Market Analysis":
-    st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-    st.header("📊 Comprehensive Market Overview")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("🔝 Most In-Demand Roles")
-        demand = df['title'].value_counts().head(10)
-        
-        fig = px.bar(x=demand.values, y=demand.index, orientation='h',
-                     color=demand.values, color_continuous_scale='Turbo',
-                     text=demand.values)
-        
-        fig.update_layout(
-            xaxis_title="Number of Openings",
-            yaxis_title="",
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(size=14),
-            showlegend=False,
-            height=400
-        )
-        
-        fig.update_traces(textposition='outside')
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with col2:
-        st.subheader("🏢 Top Hiring Companies")
-        companies = df['company'].value_counts().head(10)
-        
-        fig = px.pie(values=companies.values, names=companies.index,
-                     hole=0.4, color_discrete_sequence=px.colors.qualitative.Set3)
-        
-        fig.update_traces(textposition='inside', textinfo='percent+label')
-        fig.update_layout(
-            showlegend=False,
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(size=14),
-            height=400
-        )
+        fig.update_traces(textposition='outside', textfont=dict(size=12))
+        fig.update_xaxes(gridcolor='#F3F4F6', zeroline=False)
+        fig.update_yaxes(tickfont=dict(size=12))
         
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# Page: Career Pathways
-elif page == "💼 Career Pathways":
-    st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-    st.header("💼 Career Transition Pathways")
-    
-    st.info("🚧 Advanced career transition analysis powered by AI is coming soon!")
-    
-    # Placeholder for future features
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div style='background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); 
-                    padding: 30px; border-radius: 15px; text-align: center;'>
-            <h3>🎯 Skill Analysis</h3>
-            <p>Identify skill gaps and strengths</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div style='background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); 
-                    padding: 30px; border-radius: 15px; text-align: center;'>
-            <h3>📚 Learning Paths</h3>
-            <p>Personalized upskilling recommendations</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div style='background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); 
-                    padding: 30px; border-radius: 15px; text-align: center;'>
-            <h3>⏱️ Timeline</h3>
-            <p>Realistic transition timeframes</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# Page: Risk Assessment
-elif page == "⚠️ Risk Assessment":
-    st.markdown("<div class='info-card'>", unsafe_allow_html=True)
-    st.header("⚠️ AI Automation Risk Assessment")
+with tab4:
+    st.markdown('<div class="section-container">', unsafe_allow_html=True)
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        selected_role = st.selectbox("🎯 Select a role to analyze", sorted(df['title'].unique()))
+        st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+        st.markdown("### Automation Risk Assessment")
+        
+        selected_role = st.selectbox(
+            "Select a role to analyze",
+            sorted(df['title'].unique()),
+            label_visibility="collapsed"
+        )
         
         if selected_role:
             score = risk_analyzer.calculate_automation_risk(selected_role)
             level = risk_analyzer.get_risk_level(score)
             
-            # Risk gauge chart
+            # Modern gauge chart
             fig = go.Figure(go.Indicator(
-                mode = "gauge+number+delta",
+                mode = "gauge+number",
                 value = score,
                 domain = {'x': [0, 1], 'y': [0, 1]},
-                title = {'text': f"Automation Risk Score for {selected_role}"},
-                delta = {'reference': 0.5},
                 gauge = {
-                    'axis': {'range': [None, 1]},
-                    'bar': {'color': "darkblue"},
+                    'axis': {'range': [None, 1], 'tickcolor': '#64748B'},
+                    'bar': {'color': "#0F172A"},
                     'steps': [
-                        {'range': [0, 0.15], 'color': "#4CAF50"},
-                        {'range': [0.15, 0.3], 'color': "#8BC34A"},
-                        {'range': [0.3, 0.5], 'color': "#FFC107"},
-                        {'range': [0.5, 0.7], 'color': "#FF9800"},
-                        {'range': [0.7, 1], 'color': "#F44336"}
+                        {'range': [0, 0.15], 'color': '#DBEAFE'},
+                        {'range': [0.15, 0.3], 'color': '#BBF7D0'},
+                        {'range': [0.3, 0.5], 'color': '#FEF3C7'},
+                        {'range': [0.5, 0.7], 'color': '#FED7AA'},
+                        {'range': [0.7, 1], 'color': '#FEE2E2'}
                     ],
-                    'threshold': {
-                        'line': {'color': "red", 'width': 4},
-                        'thickness': 0.75,
-                        'value': 0.9
-                    }
+                    'bordercolor': '#E2E8F0',
+                    'borderwidth': 2
                 }
             ))
             
             fig.update_layout(
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(size=16),
-                height=400
+                paper_bgcolor='white',
+                font=dict(family="Plus Jakarta Sans", size=20, color='#0F172A'),
+                margin=dict(l=20, r=20, t=40, b=20),
+                height=300
             )
             
             st.plotly_chart(fig, use_container_width=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
         if selected_role:
+            st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+            st.markdown("### Risk Profile")
+            
             st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%); 
-                        padding: 30px; border-radius: 20px; margin-top: 50px;'>
-                <h2 style='margin-bottom: 20px;'>Risk Analysis</h2>
-                <div style='margin-bottom: 20px;'>
-                    <h3>Risk Score</h3>
-                    <p style='font-size: 3rem; font-weight: 700; margin: 0;'>{score:.2f}</p>
+            <div style="margin-bottom: 1.5rem;">
+                <div class="metric-label">Selected Role</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-top: 0.5rem;">
+                    {selected_role}
                 </div>
-                <div>
-                    <h3>Risk Level</h3>
-                    <p class='risk-{level.lower().replace(" ", "-")}'>{level}</p>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <div class="metric-label">Risk Score</div>
+                <div style="font-size: 2rem; font-weight: 800; color: #0F172A; margin-top: 0.5rem;">
+                    {score:.2f}
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <div class="metric-label">Risk Level</div>
+                <div class="risk-indicator risk-{level.lower().replace(' ', '-')}" style="margin-top: 0.5rem;">
+                    {level}
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
-            # Mitigation strategies
-            st.markdown("### 🛡️ Mitigation Strategies")
-            if score >= 0.7:
-                strategies = [
-                    "🚀 Immediate upskilling to more complex roles",
-                    "🎨 Focus on creative and strategic aspects",
-                    "👥 Develop strong human interaction skills"
-                ]
-            elif score >= 0.5:
-                strategies = [
-                    "🤖 Learn AI/ML to work alongside automation",
-                    "🏗️ Develop expertise in system design",
-                    "🧩 Focus on complex problem-solving"
-                ]
-            elif score >= 0.3:
-                strategies = [
-                    "💡 Enhance creative thinking abilities",
-                    "👔 Develop leadership skills",
-                    "🔧 Learn to manage AI systems"
-                ]
-            else:
-                strategies = [
-                    "📚 Stay updated with AI developments",
-                    "⚡ Leverage AI tools for productivity",
-                    "🚀 Focus on innovation"
-                ]
-            
-            for strategy in strategies:
-                st.markdown(f"""
-                <div style='background: rgba(102, 126, 234, 0.1); 
-                            padding: 15px; border-radius: 10px; margin-bottom: 10px;
-                            border-left: 4px solid #667eea;'>
-                    {strategy}
-                </div>
-                """, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown("</div>", unsafe_allow_html=True)
+    # Risk mitigation strategies
+    if selected_role:
+        st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+        st.markdown("### Mitigation Strategies")
+        
+        if score >= 0.7:
+            strategies = [
+                ("🚀", "Immediate upskilling", "Focus on complex, creative roles that require human judgment"),
+                ("🎨", "Creative focus", "Develop skills in areas requiring emotional intelligence and creativity"),
+                ("👥", "Human interaction", "Strengthen interpersonal and communication skills")
+            ]
+        elif score >= 0.5:
+            strategies = [
+                ("🤖", "AI collaboration", "Learn to work alongside AI tools to enhance productivity"),
+                ("🏗️", "System design", "Focus on high-level architecture and strategic planning"),
+                ("🧩", "Problem solving", "Develop expertise in complex, non-routine problem solving")
+            ]
+        elif score >= 0.3:
+            strategies = [
+                ("💡", "Innovation", "Focus on creative and innovative aspects of your role"),
+                ("👔", "Leadership", "Develop management and leadership capabilities"),
+                ("🔧", "AI management", "Learn to manage and optimize AI systems")
+            ]
+        else:
+            strategies = [
+                ("📚", "Stay current", "Keep up with latest AI developments in your field"),
+                ("⚡", "Productivity", "Use AI tools to enhance your productivity"),
+                ("🚀", "Innovation", "Focus on pushing boundaries and innovation")
+            ]
+        
+        for icon, title, desc in strategies:
+            st.markdown(f"""
+            <div class="info-box" style="margin-bottom: 1rem;">
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <div style="font-size: 1.5rem;">{icon}</div>
+                    <div>
+                        <div style="font-weight: 600; color: #0F172A; margin-bottom: 0.25rem;">{title}</div>
+                        <div style="color: #64748B; font-size: 0.875rem;">{desc}</div>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# Enhanced Footer
-st.markdown("---")
+with tab5:
+    st.markdown('<div class="section-container">', unsafe_allow_html=True)
+    
+    st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+    st.markdown("### Key Market Insights")
+    
+    # Calculate insights
+    total_jobs = len(df)
+    avg_salary = df['salary_avg'].mean() if 'salary_avg' in df.columns else 0
+    top_location = df['location'].value_counts().index[0] if 'location' in df.columns else "N/A"
+    top_company = df['company'].value_counts().index[0] if 'company' in df.columns else "N/A"
+    
+    insights = [
+        {
+            "icon": "📈",
+            "title": "Market Size",
+            "value": f"{total_jobs:,} active job postings",
+            "insight": "Strong demand indicates a healthy job market"
+        },
+        {
+            "icon": "💰",
+            "title": "Compensation Trends",
+            "value": f"${avg_salary:,.0f} average salary" if avg_salary > 0 else "Salary data varies",
+            "insight": "Competitive compensation across tech roles"
+        },
+        {
+            "icon": "🌍",
+            "title": "Geographic Hotspot",
+            "value": f"{top_location}",
+            "insight": "Leading location for tech opportunities"
+        },
+        {
+            "icon": "🏢",
+            "title": "Top Employer",
+            "value": f"{top_company}",
+            "insight": "Currently hiring most actively"
+        }
+    ]
+    
+    for insight in insights:
+        st.markdown(f"""
+        <div class="info-box" style="margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: start; gap: 1.5rem;">
+                <div style="font-size: 2rem;">{insight['icon']}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 700; color: #0F172A; font-size: 1.125rem; margin-bottom: 0.5rem;">
+                        {insight['title']}
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #334155; margin-bottom: 0.5rem;">
+                        {insight['value']}
+                    </div>
+                    <div style="color: #64748B; font-size: 0.875rem;">
+                        {insight['insight']}
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Future outlook
+    st.markdown('<div class="modern-card">', unsafe_allow_html=True)
+    st.markdown("### Future Outlook")
+    
+    st.markdown("""
+    <div class="info-box">
+        <p style="margin: 0; line-height: 1.8;">
+            The tech job market continues to evolve rapidly with AI integration. 
+            Roles requiring creativity, complex problem-solving, and human interaction 
+            show the strongest resilience against automation. Focus on developing 
+            unique human skills while embracing AI as a productivity tool.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Footer
 st.markdown("""
-<div style='text-align: center; padding: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            border-radius: 20px; color: white; margin-top: 50px;'>
-    <h3 style='color: white; margin-bottom: 10px;'>Stay Ahead of the Curve</h3>
-    <p style='color: rgba(255,255,255,0.9); margin-bottom: 20px;'>
-        Join thousands of professionals using WorkShift.AI to navigate their careers
-    </p>
-    <p style='color: rgba(255,255,255,0.7); font-size: 0.9rem;'>
-        Last Updated: {} | Data Source: Adzuna API
-    </p>
+<div style="margin-top: 4rem; padding: 2rem 0; border-top: 1px solid #E2E8F0;">
+    <div class="section-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <div style="font-weight: 700; color: #0F172A; margin-bottom: 0.5rem;">WorkShift.AI</div>
+                <div style="color: #64748B; font-size: 0.875rem;">
+                    Career Intelligence Platform • Data updated {date}
+                </div>
+            </div>
+            <div style="color: #64748B; font-size: 0.875rem;">
+                Built with Streamlit • Data from Adzuna API
+            </div>
+        </div>
+    </div>
 </div>
-""".format(datetime.now().strftime('%Y-%m-%d %H:%M')), unsafe_allow_html=True)
+""".format(date=datetime.now().strftime('%B %Y')), unsafe_allow_html=True)
